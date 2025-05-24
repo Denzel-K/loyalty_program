@@ -5,61 +5,27 @@ const router = express.Router();
 const { authenticateCustomer, requireVerifiedCustomer } = require('../middleware/auth');
 const { validatePagination } = require('../middleware/validation');
 
-// Placeholder controllers - will be implemented later
-const customerController = {
-  getProfile: (req, res) => {
-    res.json({
-      success: true,
-      message: 'Customer profile endpoint - to be implemented',
-      customer: req.customer.getPublicInfo()
-    });
-  },
-  
-  updateProfile: (req, res) => {
-    res.json({
-      success: true,
-      message: 'Update customer profile endpoint - to be implemented',
-      customerId: req.customer._id
-    });
-  },
-  
-  getVisitHistory: (req, res) => {
-    res.json({
-      success: true,
-      message: 'Customer visit history endpoint - to be implemented',
-      customerId: req.customer._id
-    });
-  },
-  
-  getPointsBalance: (req, res) => {
-    res.json({
-      success: true,
-      message: 'Customer points balance endpoint - to be implemented',
-      customerId: req.customer._id
-    });
-  },
-  
-  getRedemptionHistory: (req, res) => {
-    res.json({
-      success: true,
-      message: 'Customer redemption history endpoint - to be implemented',
-      customerId: req.customer._id
-    });
-  }
-};
+// Import controllers
+const {
+  getProfile,
+  updateProfile,
+  getVisitHistory,
+  getPointsBalance,
+  getRedemptionHistory
+} = require('../controllers/customerController');
 
 // All routes require customer authentication
 router.use(authenticateCustomer);
 router.use(requireVerifiedCustomer);
 
 // Profile routes
-router.get('/profile', customerController.getProfile);
-router.put('/profile', customerController.updateProfile);
+router.get('/profile', getProfile);
+router.put('/profile', updateProfile);
 
 // Activity routes
-router.get('/visits', validatePagination, customerController.getVisitHistory);
-router.get('/points', customerController.getPointsBalance);
-router.get('/redemptions', validatePagination, customerController.getRedemptionHistory);
+router.get('/visits', validatePagination, getVisitHistory);
+router.get('/points', getPointsBalance);
+router.get('/redemptions', validatePagination, getRedemptionHistory);
 
 // Test route
 router.get('/test', (req, res) => {
